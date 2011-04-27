@@ -4,9 +4,9 @@
 # Contributor: Christian Himpel <chressie at gmail dot com>
 
 pkgname=go
-pkgver=2011_02_15
-_pkgver=2011-02-15
+pkgver=r56
 pkgrel=1
+epoch=1
 pkgdesc='Google Go compiler and tools (release version)'
 arch=('i686' 'x86_64')
 url="http://golang.org/"
@@ -47,7 +47,7 @@ build() {
 
   mkdir -p "$GOROOT/bin"
   cd "$GOROOT/src"
-  hg update release.$_pkgver
+  hg update release.$pkgver
 
   . ./make.bash 
 }
