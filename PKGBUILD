@@ -4,7 +4,7 @@
 # Contributor: Christian Himpel <chressie at gmail dot com>
 
 pkgname=go
-pkgver=r58
+pkgver=r59
 pkgrel=1
 epoch=1
 pkgdesc='Google Go compiler and tools (release version)'
@@ -50,6 +50,14 @@ build() {
   hg update release.$pkgver
 
   . ./make.bash 
+}
+
+check() {
+  export GOROOT="$srcdir/$_hgrepo-build"
+  export GOOS=linux
+  export GOBIN="$GOROOT/bin"
+  cd "$GOROOT/src/pkg"
+  gomake -k test || true
 }
 
 package() {
