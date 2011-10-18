@@ -4,7 +4,7 @@
 # Contributor: Christian Himpel <chressie at gmail dot com>
 
 pkgname=go
-pkgver=r60
+pkgver=r60.3
 pkgrel=1
 epoch=1
 pkgdesc='Google Go compiler and tools (release version)'
@@ -12,7 +12,7 @@ arch=('i686' 'x86_64')
 url="http://golang.org/"
 license=('custom')
 depends=('perl' 'ed')
-makedepends=('mercurial')
+makedepends=('mercurial' 'inetutils')
 options=('!strip')
 install=$pkgname.install
 source=($pkgname.sh)
@@ -44,6 +44,7 @@ build() {
   export GOOS=linux
   export GOBIN="$GOROOT/bin"
   export PATH="$GOBIN:$PATH"
+  export CGO_ENABLED=0 # disable building net against libc, not needed on arch linux(?)
 
   mkdir -p "$GOROOT/bin"
   cd "$GOROOT/src"
