@@ -8,7 +8,7 @@
 
 pkgname=go
 pkgver=1
-pkgrel=5
+pkgrel=6
 epoch=2
 pkgdesc='Google Go compiler and tools (release version)'
 arch=('x86_64' 'i686')
@@ -61,7 +61,7 @@ package() {
   install -Dm644 LICENSE \
     "$pkgdir/usr/share/licenses/go/LICENSE"
   install -Dm644 misc/bash/go \
-    "$pkgdir/etc/bash_completion.d/go"
+    "$pkgdir/usr/share/bash-completion/completions/go"
   install -Dm644 misc/emacs/go-mode-load.el \
     "$pkgdir/usr/share/emacs/site-lisp/go-mode-load.el"
   install -Dm644 misc/emacs/go-mode.el \
