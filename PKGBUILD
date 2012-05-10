@@ -8,13 +8,13 @@
 
 pkgname=go
 pkgver=1.0.1
-pkgrel=1
+pkgrel=2
 epoch=2
 pkgdesc='Google Go compiler and tools (release version)'
 arch=('x86_64' 'i686')
 url="http://golang.org/"
 license=('custom')
-depends=('perl' 'ed' 'gawk')
+depends=('perl' 'gawk')
 makedepends=('inetutils')
 options=('!strip' '!emptydirs')
 install=go.install
@@ -37,7 +37,7 @@ build() {
   mkdir -p "$GOROOT/bin"
   cd "$GOROOT/src"
 
-  . ./make.bash 
+  . ./all.bash 
 }
 
 package() {
