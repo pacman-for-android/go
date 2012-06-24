@@ -9,7 +9,7 @@
 
 pkgname=go
 pkgver=1.0.2
-pkgrel=1
+pkgrel=2
 epoch=2
 pkgdesc='Google Go compiler and tools'
 arch=('x86_64' 'i686')
@@ -30,8 +30,10 @@ build() {
 
   export GOROOT_FINAL="/usr/lib/go"
   export GOOS=linux
+  export GOARCH=arm
 
-  cd src && bash make.bash
+  cd src
+  bash make.bash
 }
 
 check() {
