@@ -9,10 +9,10 @@
 
 pkgname=go
 pkgver=1.0.3
-pkgrel=4
+pkgrel=5
 epoch=2
 pkgdesc='Google Go compiler and tools'
-arch=('x86_64' 'i686')
+arch=('x86_64' 'i686' 'armv6h')
 url='http://golang.org/'
 license=('custom')
 depends=('perl' 'gawk')
@@ -30,18 +30,23 @@ build() {
 
   if [ "$CARCH" == 'x86_64' ]; then
     export GOARCH=amd64
-  fi
-  if [ "$CARCH" == 'i686' ]; then
+  elif [ "$CARCH" == 'i686' ]; then
     export GOARCH=386
+  else
+    export GOARCH=arm
   fi
-
   export GOROOT_FINAL=/usr/lib/go
   export GOOS=linux
+
   cd src
   bash make.bash
 
-  # Enable ARM crosscompilation
-  export GOARCH=arm
+  # Enable ARM crosscompilation for non-arm platforms
+  if [ "$CARCH" == 'x86_64' ]; then
+    export GOARCH=arm
+  elif [ "$CARCH" == 'i686' ]; then
+    export GOARCH=arm
+  fi
   bash make.bash
 }
 
@@ -50,9 +55,10 @@ check() {
 
   if [ "$CARCH" == 'x86_64' ]; then
     export GOARCH=amd64
-  fi
-  if [ "$CARCH" == 'i686' ]; then
+  elif [ "$CARCH" == 'i686' ]; then
     export GOARCH=386
+  else
+    export GOARCH=arm
   fi
 
   export GOROOT=$srcdir/$pkgname
