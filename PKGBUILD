@@ -11,7 +11,7 @@
 pkgname=go
 epoch=2
 pkgver=1.2.1
-pkgrel=5
+pkgrel=6
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
 url='http://golang.org/'
@@ -29,6 +29,7 @@ md5sums=('SKIP')
 
 build() {
   export GOROOT="$srcdir/$pkgname-$pkgver"
+  export GOBIN="$GOROOT/bin"
   cd "$GOROOT/src"
 
   export GOPATH="$srcdir/"
@@ -83,6 +84,7 @@ check() {
   fi
 
   export GOROOT="$srcdir/$pkgname-$pkgver"
+  export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname-$pkgver/bin:$PATH"
 
   # TestSimpleMulticastListener will fail in standard chroot
@@ -92,6 +94,7 @@ check() {
 package() {
   cd "$pkgname-$pkgver"
   export GOROOT="$srcdir/$pkgname-$pkgver"
+  export GOBIN="$GOROOT/bin"
 
   install -Dm755 $srcdir/godoc $pkgdir/usr/bin/godoc
 
