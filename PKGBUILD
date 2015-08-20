@@ -10,13 +10,13 @@
 
 pkgname=go
 epoch=2
-pkgver=1.4.2
-pkgrel=2
+pkgver=1.5
+pkgrel=1
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
 url='http://golang.org/'
 license=('BSD')
-makedepends=('inetutils' 'git' 'mercurial')
+makedepends=('inetutils' 'git' 'mercurial' 'go')
 options=('!strip' 'staticlibs')
 optdepends=('mercurial: for fetching sources from mercurial repositories'
             'git: for fetching sources from git repositories'
@@ -33,6 +33,7 @@ build() {
   export GOBIN="$GOROOT/bin"
   export GOPATH="$srcdir/"
   export GOROOT_FINAL=/usr/lib/go
+  export GOROOT_BOOTSTRAP=/usr/lib/go
 
   #
   # Arch Linux normally does not enable SSE2 for i686 because of older CPUs.
@@ -94,6 +95,7 @@ check() {
   export GOROOT="$srcdir/$pkgname-$pkgver"
   export GOBIN="$GOROOT/bin"
   export PATH="$srcdir/$pkgname-$pkgver/bin:$PATH"
+  export GOROOT_BOOTSTRAP=/usr/lib/go
 
   # TestSimpleMulticastListener will fail in standard chroot
   cd src && bash run.bash --no-rebuild || true
@@ -104,6 +106,7 @@ package() {
 
   export GOROOT="$srcdir/$pkgname-$pkgver"
   export GOBIN="$GOROOT/bin"
+  export GOROOT_BOOTSTRAP=/usr/lib/go
 
   install -Dm755 "$srcdir/godoc" "$pkgdir/usr/bin/godoc"
 
@@ -119,9 +122,9 @@ package() {
   cp -a pkg "$pkgdir/usr/lib/go"
   cp -a "$GOROOT/src" "$pkgdir/usr/lib/go/"
   cp -a "$GOROOT/src/cmd" "$pkgdir/usr/lib/go/src/cmd"
-  cp -a "$GOROOT/src/lib9" "$pkgdir/usr/lib/go/src/"
+  #cp -a "$GOROOT/src/lib9" "$pkgdir/usr/lib/go/src/"
   cp -a "$GOROOT/lib" "$pkgdir/usr/lib/go/"
-  cp -a "$GOROOT/include" "$pkgdir/usr/lib/go/"
+  #cp -a "$GOROOT/include" "$pkgdir/usr/lib/go/"
 
   install -Dm644 src/Make.* "$pkgdir/usr/lib/go/src"
 
@@ -135,10 +138,10 @@ package() {
   find "$pkgdir/usr/lib/go/src" -type f -executable -delete
 
   # Headers for C modules
-  install -Dm644 src/runtime/runtime.h \
-    "$pkgdir/usr/lib/go/src/runtime/runtime.h"
-  install -Dm644 src/runtime/cgocall.h \
-    "$pkgdir/usr/lib/go/src/runtime/cgocall.h"
+  #install -Dm644 src/runtime/runtime.h \
+  #  "$pkgdir/usr/lib/go/src/runtime/runtime.h"
+  #install -Dm644 src/runtime/cgocall.h \
+  #  "$pkgdir/usr/lib/go/src/runtime/cgocall.h"
 
   # This is to make go get code.google.com/p/go-tour/gotour and
   # then running the gotour executable work out of the box.
