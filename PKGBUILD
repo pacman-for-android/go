@@ -12,7 +12,7 @@
 pkgname=go
 epoch=2
 pkgver=1.5.1
-pkgrel=1
+pkgrel=2
 pkgdesc='Compiler and tools for the Go programming language from Google'
 arch=('x86_64' 'i686')
 url='http://golang.org/'
@@ -132,11 +132,13 @@ package() {
   rm -f "$pkgdir"/usr/lib/go/src/*.bat
 
   # Strip manually since `strip` will not process Go's static libraries.
-  for i in "$pkgdir/usr/bin/"* \
+  if [[ $CARCH == x86_64 ]]; then
+    for i in "$pkgdir/usr/bin/"* \
              "$pkgdir/usr/lib/go/pkg/bootstrap/bin/"* \
              "$pkgdir/usr/lib/go/pkg/tool/linux_amd64/"*; do
-    strip -s "$i"
+      strip -s "$i"
   done
+fi
 }
 
 # vim:set ts=2 sw=2 et:
