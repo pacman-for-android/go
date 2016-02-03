@@ -18,7 +18,6 @@ url='http://golang.org/'
 license=('BSD')
 makedepends=('inetutils' 'git' 'go')
 options=('!strip' 'staticlibs')
-install="$pkgname.install"
 source=("$pkgname-$pkgver::git+https://go.googlesource.com/go#tag=$pkgname$pkgver")
 md5sums=('SKIP')
 _gourl=golang.org/x/tools/cmd
@@ -113,6 +112,7 @@ package_go() {
               'bzr: for fetching sources from bazaar repositories'
               'subversion: for fetching sources from subversion repositories'
               'go-tools: godoc, goimports, gorename, and other tools.')
+  install="$pkgname.install"
 
   cd "$pkgname-$pkgver"
 
@@ -159,6 +159,7 @@ package_go() {
 
 package_go-tools() {
   pkgdesc='Extra developer tools for the Go programming language'
+  depends=('go>2:1.5.3-1')
 
   GOOS=linux
   case "$CARCH" in
