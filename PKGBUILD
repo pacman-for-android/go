@@ -10,7 +10,7 @@
 # Contributor: John Luebs <jkluebs@gmail.com>
 
 pkgname=('go' 'go-tools')
-pkgver=1.6.1
+pkgver=1.6.2
 pkgrel=1
 epoch=2
 arch=('x86_64' 'i686')
