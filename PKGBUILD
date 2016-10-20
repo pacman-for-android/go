@@ -10,7 +10,7 @@
 # Contributor: John Luebs <jkluebs@gmail.com>
 
 pkgname=('go' 'go-tools')
-pkgver=1.7.1
+pkgver=1.7.3
 pkgrel=1
 epoch=2
 arch=('x86_64' 'i686')
@@ -74,7 +74,7 @@ build() {
   done
 
   # Distribution tools
-  for tool in benchcmp bundle callgraph digraph eg fiximports guru html2article oracle present ssadump stress stringer ; do
+  for tool in benchcmp bundle callgraph digraph eg fiximports guru html2article present ssadump stress stringer ; do
     $GOROOT/bin/go get -d golang.org/x/tools/cmd/$tool
     $GOROOT/bin/go build -v -x -o $GOPATH/pkg/tool/${GOOS}_$GOARCH/$tool golang.org/x/tools/cmd/$tool
   done
@@ -97,7 +97,7 @@ check() {
   export GOROOT_BOOTSTRAP=/usr/lib/go
 
   for tool in goimports gomvpkg gorename gotype \
-    benchcmp bundle callgraph digraph eg fiximports guru html2article oracle present ssadump stress stringer; do
+    benchcmp bundle callgraph digraph eg fiximports guru html2article present ssadump stress stringer; do
     GOPATH="$srcdir" $GOROOT/bin/go test -v -x $_gourl/$tool
   done
 
