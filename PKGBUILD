@@ -10,7 +10,7 @@
 # Contributor: John Luebs <jkluebs@gmail.com>
 
 pkgname=('go' 'go-tools')
-pkgver=1.7.3
+pkgver=1.7.4
 pkgrel=1
 epoch=2
 arch=('x86_64' 'i686')
@@ -159,7 +159,7 @@ package_go() {
 
 package_go-tools() {
   pkgdesc='Developer tools for the Go programming language (includes godoc)'
-  depends=('go>2:1.5.3-1')
+  depends=('go')
 
   GOOS=linux
   case "$CARCH" in
