@@ -10,9 +10,9 @@
 # Contributor: John Luebs <jkluebs@gmail.com>
 
 pkgname=('go' 'go-tools')
-pkgver=1.7.5
-pkgrel=1
 epoch=2
+pkgver=1.8
+pkgrel=1
 arch=('x86_64' 'i686')
 url='http://golang.org/'
 license=('BSD')
@@ -112,7 +112,6 @@ package_go() {
               'bzr: for fetching sources from bazaar repositories'
               'subversion: for fetching sources from subversion repositories'
               'go-tools: doc, goimports, gorename, and other tools.')
-  install="$pkgname.install"
 
   cd "$pkgname-$pkgver"
 
