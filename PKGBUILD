@@ -15,25 +15,34 @@
 pkgname=go
 epoch=2
 pkgver=1.21.0
-pkgrel=1
+pkgrel=1.1
 pkgdesc='Core compiler tools for the Go programming language'
-arch=(x86_64)
+arch=(x86_64 aarch64)
 url='https://golang.org/'
 license=(BSD)
 makedepends=(git go)
 replaces=(go-pie)
 provides=(go-pie)
 options=(!strip staticlibs)
-source=(https://go.dev/dl/go${pkgver}.src.tar.gz{,.asc})
+source=(https://go.dev/dl/go${pkgver}.src.tar.gz{,.asc}
+        go-change-prefix.patch)
 validpgpkeys=('EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796')
 sha256sums=('818d46ede85682dd551ad378ef37a4d247006f12ec59b5b755601d2ce114369a'
-            'SKIP')
+            'SKIP'
+            '2dfc427534d9bcdedbddb24824c69a7d7c49c50dca42b33cee2ba96da3b09f7a')
+
+prepare() {
+  cd "$pkgname"
+  patch -Np2 -i ../go-change-prefix.patch
+  sed -i '1s|.*|#!/data/usr/bin/bash|' src/*.bash
+}
 
 build() {
-  export GOARCH=amd64
-  export GOAMD64=v1 # make sure we're building for the right x86-64 version
-  export GOROOT_FINAL=/usr/lib/go
-  export GOROOT_BOOTSTRAP=/usr/lib/go
+  export GOARCH=arm64
+  export GOOS=linux
+  # export GOAMD64=v1 # make sure we're building for the right x86-64 version
+  export GOROOT_FINAL=/data/usr/lib/go
+  export GOROOT_BOOTSTRAP=/data/usr/lib/go
 
   cd "$pkgname/src"
   ./make.bash -v
@@ -49,32 +58,32 @@ check() {
 package() {
   cd "$pkgname"
 
-  install -d "$pkgdir/usr/bin" "$pkgdir/usr/lib/go" "$pkgdir/usr/share/doc/go" \
-    "$pkgdir/usr/lib/go/pkg/linux_amd64_"{dynlink,race}
+  install -d "$pkgdir/data/usr/bin" "$pkgdir/data/usr/lib/go" "$pkgdir/data/usr/share/doc/go" \
+    "$pkgdir/data/usr/lib/go/pkg/linux_aarch64_"{dynlink,race}
 
-  cp -a bin pkg src lib misc api test "$pkgdir/usr/lib/go"
+  cp -a bin pkg src lib misc api test "$pkgdir/data/usr/lib/go"
   # We can't strip all binaries and libraries,
   # as that also strips some testdata directories and breaks the tests.
   # Just strip the packaged binaries as a compromise.
-  strip $STRIP_BINARIES "$pkgdir/usr/lib/go"{/bin/*,/pkg/tool/*/*}
+  strip $STRIP_BINARIES "$pkgdir/data/usr/lib/go"{/bin/*,/pkg/tool/*/*}
 
-  cp -r doc/* "$pkgdir/usr/share/doc/go"
+  cp -r doc/* "$pkgdir/data/usr/share/doc/go"
 
-  ln -sf /usr/lib/go/bin/go "$pkgdir/usr/bin/go"
-  ln -sf /usr/lib/go/bin/gofmt "$pkgdir/usr/bin/gofmt"
-  ln -sf /usr/share/doc/go "$pkgdir/usr/lib/go/doc"
+  ln -sf /data/usr/lib/go/bin/go "$pkgdir/data/usr/bin/go"
+  ln -sf /data/usr/lib/go/bin/gofmt "$pkgdir/data/usr/bin/gofmt"
+  ln -sf /data/usr/share/doc/go "$pkgdir/data/usr/lib/go/doc"
 
-  install -Dm644 VERSION "$pkgdir/usr/lib/go/VERSION"
+  install -Dm644 VERSION "$pkgdir/data/usr/lib/go/VERSION"
 
-  rm -rf "$pkgdir/usr/lib/go/pkg/bootstrap" "$pkgdir/usr/lib/go/pkg/tool/*/api"
+  rm -rf "$pkgdir/data/usr/lib/go/pkg/bootstrap" "$pkgdir/data/usr/lib/go/pkg/tool/*/api"
 
   # TODO: Figure out if really needed
-  rm -rf "$pkgdir"/usr/lib/go/pkg/obj/go-build
+  rm -rf "$pkgdir"/data/usr/lib/go/pkg/obj/go-build
 
   # https://github.com/golang/go/issues/57179
-  install -Dm644 go.env "$pkgdir/usr/lib/go/go.env"
+  install -Dm644 go.env "$pkgdir/data/usr/lib/go/go.env"
 
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE "$pkgdir/data/usr/share/licenses/$pkgname/LICENSE"
 }
 
 # vim: ts=2 sw=2 et
